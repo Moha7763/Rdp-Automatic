@@ -12,11 +12,11 @@ jobs:
     steps:
     - name: Set up RDP
       run: |
-        # تمكين RDP
+        # تحقق من تفعيل حساب Administrator
         net user administrator /active:yes
         
-        # توليد كلمة مرور عشوائية
-        $password = [System.Web.Security.Membership]::GeneratePassword(12, 3)
+        # توليد كلمة مرور عشوائية باستخدام PowerShell
+        $password = [System.IO.Path]::GetRandomFileName().Replace(".", "A") + [System.IO.Path]::GetRandomFileName().Replace(".", "B")
         net user administrator $password
         netsh advfirewall firewall add rule name="Open RDP" dir=in action=allow protocol=TCP localport=3389
 
