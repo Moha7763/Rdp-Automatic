@@ -14,4 +14,4 @@
     $message = "RDP Session Created: %0AIP Address: $ip %0AUsername: testuser %0APassword: $password"
 
     # إرسال البيانات إلى بوت تلجرام
-    Invoke-RestMethod -Uri "https://api.telegram.org/bot7047714100:AAHptINe1QLjomnzqKaOMnTm_YRmt5T5XAM/sendMessage?chat_id=<YOUR_GROUP_CHAT_ID>&text=$message"
+    Invoke-RestMethod -Uri "https://api.telegram.org/bot7047714100:AAHptINe1QLjomnzqKaOMnTm_YRmt5T5XAM/sendMessage?chat_id=<242676339>&text=$message"
