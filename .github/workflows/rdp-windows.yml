@@ -1,0 +1,36 @@
+name: RDP Windows VM
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0' # إعادة تشغيل الأكشن كل أسبوع يوم الأحد في 12:00 صباحًا
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Set up RDP
+      run: |
+        # تمكين RDP
+        net user administrator /active:yes
+        
+        # توليد كلمة مرور عشوائية
+        $password = [System.Web.Security.Membership]::GeneratePassword(12, 3)
+        net user administrator $password
+        netsh advfirewall firewall add rule name="Open RDP" dir=in action=allow protocol=TCP localport=3389
+
+        # جلب عنوان IP الخاص بالخادم
+        $ip = (Invoke-RestMethod -Uri "http://ipinfo.io/ip").Trim()
+        echo "IP Address: $ip"
+
+        # إعداد رسالة تحتوي على التفاصيل
+        $message = "RDP Session Created: %0AIP Address: $ip %0AUsername: administrator %0APassword: $password"
+
+        # إرسال البيانات إلى بوت تلجرام
+        Invoke-RestMethod -Uri "https://api.telegram.org/bot7047714100:AAHptINe1QLjomnzqKaOMnTm_YRmt5T5XAM/sendMessage?chat_id=<242676339>&text=$message"
+
+    - name: Keep VM alive for 7 days
+      run: |
+        # الإبقاء على الجلسة نشطة لمدة 7 أيام (604800 ثانية)
+        timeout /t 604800 /nobreak
